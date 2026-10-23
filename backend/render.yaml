@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: simple-video-maker-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: HOST
+        value: 0.0.0.0
+      - key: CORS_ORIGINS
+        value: https://your-frontend-url.vercel.app,http://localhost:5173
+      - key: UPLOAD_DIR
+        value: ./uploads
+      - key: TEMP_DIR
+        value: ./temp
+      - key: OUTPUT_DIR
+        value: ./output
+      - key: MAX_UPLOAD_SIZE
+        value: 524288000
+      - key: MAX_PROJECT_FILES
+        value: 50
+      - key: FFMPEG_PATH
+        value: ffmpeg
+      - key: FFPROBE_PATH
+        value: ffprobe
+      - key: MAX_RENDER_JOBS
+        value: 3
+      - key: RENDER_TIMEOUT
+        value: 600
+      - key: TEMP_FILE_RETENTION
+        value: 3600
+      - key: OUTPUT_FILE_RETENTION
+        value: 86400
