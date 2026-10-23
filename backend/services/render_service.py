@@ -1,10 +1,13 @@
 import os
 import subprocess
 import asyncio
+import logging
 from typing import Optional
 from config import settings
 from models.storage import storage
 from models.schemas import RenderStatus, AspectRatio, Resolution, OutputFormat
+
+logger = logging.getLogger(__name__)
 
 
 RESOLUTION_MAP = {
@@ -47,6 +50,7 @@ def get_dimensions(aspect_ratio: AspectRatio, resolution: Resolution) -> tuple:
 
 def run_ffmpeg_command(cmd: list, timeout: int = None) -> tuple:
     try:
+        logger.info(f"Running FFmpeg command: {' '.join(cmd[:5])}...")
         process = subprocess.Popen(
             cmd,
             stdout=subprocess.PIPE,
@@ -54,11 +58,16 @@ def run_ffmpeg_command(cmd: list, timeout: int = None) -> tuple:
             universal_newlines=True
         )
         stdout, stderr = process.communicate(timeout=timeout)
+        if process.returncode != 0:
+            logger.error(f"FFmpeg command failed with return code {process.returncode}")
+            logger.error(f"FFmpeg stderr: {stderr[:500]}")
         return process.returncode, stdout, stderr
     except subprocess.TimeoutExpired:
         process.kill()
+        logger.error(f"FFmpeg command timed out after {timeout}s")
         return -1, "", "Command timed out"
     except Exception as e:
+        logger.error(f"FFmpeg command exception: {str(e)}")
         return -1, "", str(e)
 
 
@@ -67,20 +76,24 @@ def update_render_progress(render_id: str, status: RenderStatus, progress: float
 
 
 async def render_video(render_id: str, project_id: str):
+    logger.info(f"Starting render: {render_id} for project: {project_id}")
     try:
         render = storage.get_render(render_id)
         project = storage.get_project(project_id)
 
         if not project or not render:
+            logger.error(f"Project or render not found: render_id={render_id}, project_id={project_id}")
             storage.update_render(render_id, status=RenderStatus.FAILED, error="Project or render not found")
             return
 
         if not project.media:
+            logger.error(f"No media in project: {project_id}")
             storage.update_render(render_id, status=RenderStatus.FAILED, error="No media in project")
             return
 
         render_dir = os.path.join(settings.temp_dir, render_id)
         os.makedirs(render_dir, exist_ok=True)
+        logger.info(f"Created render directory: {render_dir}")
 
         update_render_progress(render_id, RenderStatus.PREPARING, 5, "Preparing media files")
 
@@ -115,7 +128,10 @@ async def render_video(render_id: str, project_id: str):
                     "-y",
                     segment_path
                 ]
-                run_ffmpeg_command(cmd, timeout=60)
+                returncode, stdout, stderr = run_ffmpeg_command(cmd, timeout=60)
+                if returncode != 0:
+                    logger.error(f"Failed to process image {media_item.filename}: {stderr}")
+                    continue
                 total_duration += duration
 
             elif media_item.type.value == "video":
@@ -142,7 +158,10 @@ async def render_video(render_id: str, project_id: str):
                     cmd.extend(duration_filter.split())
 
                 cmd.extend(["-y", segment_path])
-                run_ffmpeg_command(cmd, timeout=120)
+                returncode, stdout, stderr = run_ffmpeg_command(cmd, timeout=120)
+                if returncode != 0:
+                    logger.error(f"Failed to process video {media_item.filename}: {stderr}")
+                    continue
 
                 probe_cmd = [
                     settings.ffprobe_path,
@@ -156,14 +175,17 @@ async def render_video(render_id: str, project_id: str):
                     segment_duration = float(duration_output.strip())
                     total_duration += segment_duration
                 except:
+                    logger.warning(f"Could not get duration for {media_item.filename}, using default 5s")
                     total_duration += 5
 
             segments.append(segment_path)
 
         if not segments:
+            logger.error(f"No valid segments created for render {render_id}")
             storage.update_render(render_id, status=RenderStatus.FAILED, error="No valid segments created")
             return
 
+        logger.info(f"Combining {len(segments)} segments")
         update_render_progress(render_id, RenderStatus.COMBINING, 40, "Combining segments")
 
         concat_list_path = os.path.join(render_dir, "concat.txt")

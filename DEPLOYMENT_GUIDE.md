@@ -59,7 +59,7 @@ Scroll down to "Environment Variables" and add the following:
 |-----|-------|
 | `PORT` | `8000` |
 | `HOST` | `0.0.0.0` |
-| `CORS_ORIGINS` | `https://your-frontend-url.vercel.app,http://localhost:5173` |
+| `CORS_ORIGINS` | `https://simple-online-video-maker.vercel.app,http://localhost:5173` |
 | `UPLOAD_DIR` | `./uploads` |
 | `TEMP_DIR` | `./temp` |
 | `OUTPUT_DIR` | `./output` |
@@ -72,7 +72,7 @@ Scroll down to "Environment Variables" and add the following:
 | `TEMP_FILE_RETENTION` | `3600` |
 | `OUTPUT_FILE_RETENTION` | `86400` |
 
-**Important**: For `CORS_ORIGINS`, replace `your-frontend-url.vercel.app` with your actual Vercel URL after you deploy the frontend (you'll update this later).
+**Important**: The `CORS_ORIGINS` must include your Vercel frontend URL to allow the frontend to communicate with the backend. If your Vercel URL is different, update it accordingly.
 
 ### 1.6 Select a Plan
 
@@ -142,9 +142,9 @@ Scroll down to "Environment Variables" and add:
 
 | Key | Value |
 |-----|-------|
-| `VITE_API_BASE_URL` | `https://your-backend-url.onrender.com/api` |
+| `VITE_API_BASE_URL` | `https://simple-online-video-maker.onrender.com/api` |
 
-**Important**: Replace `your-backend-url.onrender.com` with your actual Render backend URL from Step 1.8.
+**Important**: This value must match your actual Render backend URL. If your backend URL is different, replace it accordingly.
 
 ### 2.5 Deploy
 

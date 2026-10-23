@@ -154,16 +154,39 @@ function App() {
 
   useEffect(() => {
     if (render && render.status !== RenderStatus.COMPLETED && render.status !== RenderStatus.FAILED && render.status !== RenderStatus.CANCELLED) {
-      const interval = setInterval(async () => {
+      let retryCount = 0;
+      let intervalId: number | null = null;
+      let timeoutId: number | null = null;
+
+      const pollRender = async () => {
         try {
           const updatedRender = await api.render.get(render.id);
           setRender(updatedRender);
+          retryCount = 0; // Reset retry count on success
         } catch (error) {
           console.error("Failed to poll render status:", error);
-        }
-      }, 1000);
+          retryCount++;
 
-      return () => clearInterval(interval);
+          // Exponential backoff: increase interval after multiple failures
+          if (retryCount >= 3) {
+            console.warn(`Multiple poll failures (${retryCount}), backing off`);
+            if (intervalId) clearInterval(intervalId);
+            const backoffTime = Math.min(5000 * Math.pow(2, retryCount - 3), 30000); // Max 30s
+            timeoutId = window.setTimeout(pollRender, backoffTime);
+          }
+        }
+      };
+
+      // Initial poll
+      pollRender();
+
+      // Set up regular polling with 2-second interval (reduced from 1s to reduce load)
+      intervalId = window.setInterval(pollRender, 2000);
+
+      return () => {
+        if (intervalId) clearInterval(intervalId);
+        if (timeoutId) clearTimeout(timeoutId);
+      };
     }
   }, [render]);
 

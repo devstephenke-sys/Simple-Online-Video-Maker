@@ -2,9 +2,17 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
+import logging
 from config import settings
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 app = FastAPI(title="Simple Video Maker API", version="1.0.0")
+
+# Log CORS origins for debugging
+logger.info(f"CORS Origins: {settings.cors_origins_list}")
 
 app.add_middleware(
     CORSMiddleware,
