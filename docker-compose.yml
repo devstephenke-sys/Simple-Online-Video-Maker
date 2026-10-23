@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./uploads:/app/uploads
+      - ./temp:/app/temp
+      - ./output:/app/output
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+      - UPLOAD_DIR=./uploads
+      - TEMP_DIR=./temp
+      - OUTPUT_DIR=./output
+      - MAX_UPLOAD_SIZE=524288000
+      - MAX_PROJECT_FILES=50
+      - FFMPEG_PATH=ffmpeg
+      - FFPROBE_PATH=ffprobe
+      - MAX_RENDER_JOBS=3
+      - RENDER_TIMEOUT=600
