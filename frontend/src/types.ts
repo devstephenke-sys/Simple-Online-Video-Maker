@@ -1,58 +1,74 @@
-export enum MediaType {
-  IMAGE = "image",
-  VIDEO = "video",
-}
+export const MediaType = {
+  IMAGE: "image",
+  VIDEO: "video",
+} as const;
 
-export enum AspectRatio {
-  RATIO_16_9 = "16:9",
-  RATIO_9_16 = "9:16",
-  RATIO_1_1 = "1:1",
-  RATIO_4_3 = "4:3",
-}
+export type MediaType = (typeof MediaType)[keyof typeof MediaType];
 
-export enum Resolution {
-  P480 = "480p",
-  P720 = "720p",
-  P1080 = "1080p",
-  P1440 = "1440p",
-}
+export const AspectRatio = {
+  RATIO_16_9: "16:9",
+  RATIO_9_16: "9:16",
+  RATIO_1_1: "1:1",
+  RATIO_4_3: "4:3",
+} as const;
 
-export enum OutputFormat {
-  MP4 = "mp4",
-  WEBM = "webm",
-  MOV = "mov",
-}
+export type AspectRatio = (typeof AspectRatio)[keyof typeof AspectRatio];
 
-export enum ImageDisplayMode {
-  FIT = "fit",
-  FILL = "fill",
-  BLURRED = "blurred",
-}
+export const Resolution = {
+  P480: "480p",
+  P720: "720p",
+  P1080: "1080p",
+  P1440: "1440p",
+} as const;
 
-export enum Transition {
-  CUT = "cut",
-  FADE = "fade",
-  CROSSFADE = "crossfade",
-}
+export type Resolution = (typeof Resolution)[keyof typeof Resolution];
 
-export enum AudioBehavior {
-  LOOP = "loop",
-  STOP = "stop",
-}
+export const OutputFormat = {
+  MP4: "mp4",
+  WEBM: "webm",
+  MOV: "mov",
+} as const;
 
-export enum RenderStatus {
-  PENDING = "pending",
-  PREPARING = "preparing",
-  PROCESSING_IMAGES = "processing_images",
-  PROCESSING_VIDEOS = "processing_videos",
-  COMBINING = "combining",
-  ADDING_AUDIO = "adding_audio",
-  ENCODING = "encoding",
-  VALIDATING = "validating",
-  COMPLETED = "completed",
-  FAILED = "failed",
-  CANCELLED = "cancelled",
-}
+export type OutputFormat = (typeof OutputFormat)[keyof typeof OutputFormat];
+
+export const ImageDisplayMode = {
+  FIT: "fit",
+  FILL: "fill",
+  BLURRED: "blurred",
+} as const;
+
+export type ImageDisplayMode = (typeof ImageDisplayMode)[keyof typeof ImageDisplayMode];
+
+export const Transition = {
+  CUT: "cut",
+  FADE: "fade",
+  CROSSFADE: "crossfade",
+} as const;
+
+export type Transition = (typeof Transition)[keyof typeof Transition];
+
+export const AudioBehavior = {
+  LOOP: "loop",
+  STOP: "stop",
+} as const;
+
+export type AudioBehavior = (typeof AudioBehavior)[keyof typeof AudioBehavior];
+
+export const RenderStatus = {
+  PENDING: "pending",
+  PREPARING: "preparing",
+  PROCESSING_IMAGES: "processing_images",
+  PROCESSING_VIDEOS: "processing_videos",
+  COMBINING: "combining",
+  ADDING_AUDIO: "adding_audio",
+  ENCODING: "encoding",
+  VALIDATING: "validating",
+  COMPLETED: "completed",
+  FAILED: "failed",
+  CANCELLED: "cancelled",
+} as const;
+
+export type RenderStatus = (typeof RenderStatus)[keyof typeof RenderStatus];
 
 export interface MediaItem {
   id: string;

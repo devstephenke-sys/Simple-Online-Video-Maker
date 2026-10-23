@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Project, Render, RenderStatus } from "./types";
+import type { Project, Render } from "./types";
+import { RenderStatus } from "./types";
 import { api } from "./api";
 import Header from "./components/Header";
 import UploadArea from "./components/UploadArea";
@@ -223,7 +224,7 @@ function App() {
 
           <button
             onClick={handleRender}
-            disabled={!project.media.length || (render && render.status !== RenderStatus.COMPLETED && render.status !== RenderStatus.FAILED && render.status !== RenderStatus.CANCELLED)}
+            disabled={!project.media.length || !!render && render.status !== RenderStatus.COMPLETED && render.status !== RenderStatus.FAILED && render.status !== RenderStatus.CANCELLED}
             className="w-full mt-6 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {render && render.status !== RenderStatus.COMPLETED && render.status !== RenderStatus.FAILED && render.status !== RenderStatus.CANCELLED

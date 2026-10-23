@@ -1,4 +1,5 @@
-import { Render, RenderStatus } from "../types";
+import type { Render } from "../types";
+import { RenderStatus } from "../types";
 
 interface RenderModalProps {
   render: Render;

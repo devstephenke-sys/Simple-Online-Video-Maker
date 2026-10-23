@@ -1,5 +1,7 @@
-import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import { MediaItem, MediaType } from "../types";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import type { DropResult } from "@hello-pangea/dnd";
+import type { MediaItem } from "../types";
+import { MediaType } from "../types";
 
 interface TimelineProps {
   media: MediaItem[];
@@ -25,10 +27,6 @@ export default function Timeline({ media, projectId, onUpdate, onDelete, onPrevi
       item.id === mediaId ? { ...item, image_duration: duration } : item
     );
     onUpdate(updatedMedia);
-  };
-
-  const getThumbnailUrl = (mediaId: string) => {
-    return `/api/projects/${projectId}/media/${mediaId}/thumbnail`;
   };
 
   const totalDuration = media.reduce((acc, item) => {

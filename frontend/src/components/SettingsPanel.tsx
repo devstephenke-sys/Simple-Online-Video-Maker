@@ -1,4 +1,5 @@
-import { VideoSettings, AspectRatio, Resolution, OutputFormat } from "../types";
+import type { VideoSettings } from "../types";
+import { AspectRatio, Resolution, OutputFormat } from "../types";
 
 interface SettingsPanelProps {
   settings: VideoSettings;

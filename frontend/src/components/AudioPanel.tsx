@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
-import { AudioConfig, AudioBehavior } from "../types";
+import type { AudioConfig } from "../types";
+import { AudioBehavior } from "../types";
 
 interface AudioPanelProps {
   audio: AudioConfig;

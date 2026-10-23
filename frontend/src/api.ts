@@ -1,10 +1,9 @@
-import {
+import type {
   Project,
   MediaItem,
   AudioConfig,
   VideoSettings,
   Render,
-  RenderStatus,
 } from "./types";
 import { API_BASE } from "./config";
 

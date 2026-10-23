@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
-import { Project, MediaType } from "../types";
+import type { Project } from "../types";
+import { MediaType } from "../types";
 
 interface PreviewProps {
   project: Project;
