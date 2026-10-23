@@ -165,7 +165,7 @@ export default function AudioPanel({ audio, projectId, onUpload, onDelete, onUpd
               />
             </svg>
             <p className="text-sm text-gray-600">Add Background Audio</p>
-            <p className="text-xs text-gray-400 mt-1">MP3, WAV, AAC, M4A</p>
+            <p className="text-xs text-gray-400 mt-1">MP3, WAV, AAC, M4A, MPEG</p>
           </button>
 
           <input
