@@ -12,7 +12,7 @@ router = APIRouter()
 
 ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
 ALLOWED_VIDEO_TYPES = ["video/mp4", "video/quicktime", "video/webm"]
-ALLOWED_AUDIO_TYPES = ["audio/mpeg", "audio/mp3", "audio/x-mpeg", "audio/wav", "audio/aac", "audio/mp4", "audio/x-m4a"]
+ALLOWED_AUDIO_TYPES = ["audio/mpeg", "audio/mp3", "audio/x-mpeg", "audio/x-mp3", "audio/wav", "audio/wave", "audio/aac", "audio/mp4", "audio/x-m4a", "audio/m4a"]
 
 
 @router.post("/{project_id}/media")

@@ -171,7 +171,7 @@ export default function AudioPanel({ audio, projectId, onUpload, onDelete, onUpd
           <input
             ref={fileInputRef}
             type="file"
-            accept="audio/*"
+            accept="audio/*,.mp3,.wav,.aac,.m4a,.mpeg,.mpga"
             onChange={handleFileSelect}
             className="hidden"
           />
